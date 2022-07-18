@@ -1,0 +1,32 @@
+server:
+  port: 7000
+
+logging:
+  level:
+    org.springframework: DEBUG
+    #org.springframework: INFO
+
+spring:
+  messages:
+    basename: messages
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    show-sql: true
+    defer-datasource-initialization: true
+
+  h2:
+    console:
+      enabled: true
+
+jwt:
+  header: Authorization
+  #HS512이므로 secret키는 64bits 이상이어야함
+  #아래 string을 base64로 인코딩해서 적어둠
+  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  token-validity-in-seconds: 86400

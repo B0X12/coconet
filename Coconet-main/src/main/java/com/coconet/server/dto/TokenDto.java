@@ -1,0 +1,14 @@
+package com.coconet.server.dto;
+
+import lombok.*;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class TokenDto {
+
+    private String AccessToken;
+    private String RefreshToken;
+}
