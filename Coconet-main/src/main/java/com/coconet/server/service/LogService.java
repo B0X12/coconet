@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 public class LogService {
 
     private Logger logger = LoggerFactory.getLogger("noticeLog");
-
     private String TAG_MAIN = "[NOTICE]";
 
     public boolean noticeLog (int noticeType, String noticeTitle, String date)

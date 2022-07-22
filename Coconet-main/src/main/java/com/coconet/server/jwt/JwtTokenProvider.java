@@ -1,6 +1,7 @@
 package com.coconet.server.jwt;
 
 import com.coconet.server.dto.TokenDto;
+import com.coconet.server.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -13,8 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider implements InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+    private RefreshTokenRepository refreshTokenRepository;
 
     private static final String AUTHORITIES_KEY = "auth";
 
@@ -33,6 +37,7 @@ public class JwtTokenProvider implements InitializingBean {
     private final long REFRESH_TOKEN_EXPIRE_TIME;
 
     private Key key;
+
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secret,
@@ -78,6 +83,9 @@ public class JwtTokenProvider implements InitializingBean {
         return new TokenDto(accessToken, refreshToken);
     }
 
+    /**
+     * 토큰으로 정보를 조회
+     */
     public Authentication getAuthentication(String token)
     {
         Claims claims = Jwts
@@ -95,6 +103,11 @@ public class JwtTokenProvider implements InitializingBean {
         User principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
+
+    // 토큰으로 회원 정보 조회
+    public String getUserEmail(String token) {
+        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
     }
 
 
@@ -116,4 +129,5 @@ public class JwtTokenProvider implements InitializingBean {
         }
         return false;
     }
+
 }

@@ -1,14 +1,15 @@
 package com.coconet.server.controller;
 
-import com.coconet.server.define.NoticeType;
 import com.coconet.server.dto.AuthDto;
 import com.coconet.server.dto.TokenDto;
 import com.coconet.server.dto.UserDto;
+import com.coconet.server.entity.Token;
+import com.coconet.server.exception.UserNotFoundException;
+import com.coconet.server.repository.RefreshTokenRepository;
 import com.coconet.server.repository.UserRepository;
 import com.coconet.server.dto.LoginDto;
 import com.coconet.server.entity.Users;
 import com.coconet.server.service.AuthService;
-import com.coconet.server.service.LogService;
 import com.coconet.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,11 +35,10 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserJpaController {
 
-    private final UserService userService;
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserService userService;
     private final AuthService authService;
-    private final LogService logService;
-    private final NoticeType noticeDefine;
     private BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
 
@@ -50,15 +50,6 @@ public class UserJpaController {
     public List<Users> retrieveAllUsers() {
         return userRepository.findAll();
     }   // 전체 사용자 조회
-
-    @GetMapping("/log")
-    public boolean logTest() {
-
-        return logService.noticeLog(noticeDefine.WORK_START, "개발팀 김사원 출근", "2022-07-18");
-
-    }   // 전체 사용자 조회
-
-
 
     @GetMapping("/users/{num}")
     @PreAuthorize("hasAnyRole('ADMIN')") // ADMIN 권한만 조회 가능
@@ -73,6 +64,7 @@ public class UserJpaController {
 
         return users.get();
     }   // 사용자 1명 조회
+
 
 
     /**
@@ -103,6 +95,10 @@ public class UserJpaController {
         // JWT 토큰 생성
         TokenDto tokenDto = authService.createToken(loginDto);
 
+        // Refresh Token DB에 저장
+        Token tokenData = new Token(user.getEmail(), tokenDto.getRefreshToken());
+        refreshTokenRepository.save(tokenData);
+
         /**
          * DB에서 유저 조회
          */
@@ -115,14 +111,14 @@ public class UserJpaController {
                     // 첫 번째 인자(plain)와 두 번째 인자(encrypt)의 값이 동일한지 확인
         {
             String name = user.getName();
-            AuthDto returnData = new AuthDto(name, "true");
-            TokenDto returnToken = new TokenDto(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
-            responseHeaders.add("JWT-Access-Token", tokenDto.getAccessToken());
-            responseHeaders.add("JWT-Refresh-Token", tokenDto.getRefreshToken());
+            AuthDto authDto = new AuthDto(name, "true");
+
+            responseHeaders.add("Jwt_Access_Token", tokenDto.getAccessToken());
+            responseHeaders.add("Jwt_Refresh_Token", tokenDto.getRefreshToken());
 
             return ResponseEntity.ok()
                     .headers(responseHeaders)
-                    .body(returnData);
+                    .body(authDto);
         }
         else {
             throw new UserNotFoundException(String.format("입력된 정보가 틀렸습니다."));

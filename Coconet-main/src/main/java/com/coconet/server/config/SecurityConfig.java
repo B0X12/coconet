@@ -5,6 +5,7 @@ import com.coconet.server.jwt.JwtAuthenticationEntryPoint;
 import com.coconet.server.jwt.JwtSecurityConfig;
 import com.coconet.server.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -14,7 +15,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // @ProAuthorize를 메소드 단위로 추가하기 위해 사용
@@ -44,15 +50,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     // h2 콘솔과 관련된 모든 요청과
     // favicon 관련 요청은 Spring Security에서 무시
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers(
-                        "/h2-console/**"
-                );
+                .antMatchers("/h2-console/**");
     }
+
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -85,8 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/coconet/signup").permitAll()
                 .antMatchers("/coconet/login").permitAll()
                 .antMatchers("/coconet/log").permitAll()
-
-                //.anyRequest().authenticated()
+                .antMatchers("/coconet/reissue").permitAll()
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));

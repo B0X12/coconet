@@ -1,5 +1,6 @@
 package com.coconet.server.repository;
 
+import com.coconet.server.dto.LoginDto;
 import com.coconet.server.entity.Users;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

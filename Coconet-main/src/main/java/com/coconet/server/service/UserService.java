@@ -14,6 +14,7 @@ import java.util.Collections;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
