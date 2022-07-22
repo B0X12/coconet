@@ -1,7 +1,7 @@
 package com.coconet.server.jwt;
 
 import com.coconet.server.dto.TokenDto;
-import com.coconet.server.repository.RefreshTokenRepository;
+import com.coconet.server.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,10 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider implements InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
-    private RefreshTokenRepository refreshTokenRepository;
 
     private static final String AUTHORITIES_KEY = "auth";
 
@@ -38,13 +37,16 @@ public class JwtTokenProvider implements InitializingBean {
 
     private Key key;
 
+    private final CustomUserDetailsService customUserDetailsService;
+
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds, CustomUserDetailsService customUserDetailsService) {
         this.secret = secret;
         this.ACCESS_TOKEN_EXPIRE_TIME = tokenValidityInSeconds * 30 * 60 * 1000L; // 30m
         this.REFRESH_TOKEN_EXPIRE_TIME = tokenValidityInSeconds * 7 * 1000L;    // 7일
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Override
@@ -76,6 +78,7 @@ public class JwtTokenProvider implements InitializingBean {
                 .compact();
 
         String refreshToken = Jwts.builder()
+                .setSubject(authentication.getName())
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -84,7 +87,7 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     /**
-     * 토큰으로 정보를 조회
+     * 토큰으로 Authentication 정보를 조회
      */
     public Authentication getAuthentication(String token)
     {
@@ -105,9 +108,29 @@ public class JwtTokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+    public Authentication getAuthenticationByRefreshToken(String refreshToken) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(refreshToken)
+                .getBody();
+
+        String userName = claims.getSubject();
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
+        return new UsernamePasswordAuthenticationToken(userDetails, refreshToken, userDetails.getAuthorities());
+    }
+
     // 토큰으로 회원 정보 조회
     public String getUserEmail(String token) {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
+    }
+
+
+    // Request의 Header에서 AccessToken 값을 가져옵니다. "authorization" : "token'
+    public String resolveAccessToken(HttpServletRequest request) {
+        if(request.getHeader("authorization") != null )
+            return request.getHeader("authorization").substring(7);
+        return null;
     }
 
 

@@ -1,6 +1,7 @@
 package com.coconet.server.service;
 
 import com.coconet.server.dto.LoginDto;
+import com.coconet.server.dto.RelssueTokenDto;
 import com.coconet.server.dto.TokenDto;
 import com.coconet.server.entity.Token;
 import com.coconet.server.entity.Users;
@@ -21,8 +22,8 @@ public class AuthService {
 
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private RefreshTokenRepository refreshTokenRepository;
-    private UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
 
 
     public AuthService(JwtTokenProvider tokenProvider
@@ -57,14 +58,14 @@ public class AuthService {
 
 
     // Access Token 재발급
-    public TokenDto relssueAccessToken(String accessToken, String refreshToken, String email) {
-        // email로 DB에 저장된 Refresh Token을 찾음
-        Optional<Token> findToken = refreshTokenRepository.findByEmail(email);
-        findToken.orElseThrow(
+    public RelssueTokenDto relssueAccessToken(String refreshToken) {
+
+        // Refresh Token으로 유저 email을 가져옴
+        Optional<Token> token = refreshTokenRepository.findByRefreshToken(refreshToken);
+        token.orElseThrow(
                 () -> new CustomException("잘못된 JWT 토큰입니다.")
         );
-
-        String findRefreshToken = findToken.get().getRefreshToken();
+        String findRefreshToken = token.get().getRefreshToken();
 
         // Refresh Token의 일치 여부 확인
         if (!(refreshToken.equals(findRefreshToken))) {
@@ -72,20 +73,29 @@ public class AuthService {
         }
 
         // Refresh Token의 만료 여부 확인
-        boolean isTokenValid = tokenProvider.validateToken(findRefreshToken);
+        boolean isTokenValid = tokenProvider.validateToken(refreshToken);
         if (isTokenValid) {
-            Users user = userRepository.findByEmail(email);
+            Users user = userRepository.findByEmail(token.get().getEmail());
             Optional<Users> loginUser = Optional.ofNullable(user);
 
             if (loginUser.isPresent()) {
-                // Access Token과 Refresh Token을 둘 다 새로 발급
-                TokenDto tokenDto = tokenProvider.createToken(tokenProvider.getAuthentication(accessToken));
+                // refresh Token으로 기존의 Authentication 객체 받아와서
+                // 그걸로 새 Access, Refresh 토큰 발급
+                Authentication authentication = tokenProvider.getAuthenticationByRefreshToken(refreshToken);
+                TokenDto tokenDto = tokenProvider.createToken(authentication);
 
-                // Refresh Token은 DB에 새로 저장
-                Token token = new Token(user.getEmail(), tokenDto.getRefreshToken());
-                refreshTokenRepository.save(token);
+                // 새로 발급받은 Refresh Token은 DB에 새로 저장
+                Token saveToken = new Token(token.get().getEmail(), tokenDto.getRefreshToken());
+                refreshTokenRepository.save(saveToken);
 
-                return tokenDto;
+                RelssueTokenDto relssueTokenDto = new RelssueTokenDto(
+                        authentication.getName()
+                        , "true"
+                        , tokenDto.getAccessToken()
+                        , tokenDto.getRefreshToken()
+                );
+
+                return relssueTokenDto;
             }
         }
         return null;
