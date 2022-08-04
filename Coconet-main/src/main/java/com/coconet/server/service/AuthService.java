@@ -89,7 +89,7 @@ public class AuthService {
                 refreshTokenRepository.save(saveToken);
 
                 RelssueTokenDto relssueTokenDto = new RelssueTokenDto(
-                        authentication.getName()
+                        user.getName()
                         , "true"
                         , tokenDto.getAccessToken()
                         , tokenDto.getRefreshToken()

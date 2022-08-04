@@ -1,29 +1,34 @@
 package com.coconet.server.controller;
 
-import com.coconet.server.define.NoticeType;
-import com.coconet.server.service.LogService;
+import com.coconet.server.service.ReadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @Slf4j
 @RestController
-@RequestMapping("/coconet")
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class LogController {
 
-    private final LogService logService;
-    private final NoticeType noticeDefine;
+    private final ReadFileService readFileService;
 
-    /**
-     로그
-     */
-    @GetMapping("/log")
-    public boolean logTest() {
+    @GetMapping("/logs/admin") // ADMIN 페이지에서 관리자 로그 조회
+    @PreAuthorize("hasAnyRole('ADMIN')") // ADMIN 권한만 조회 가능
+    public String[] adminLogInfo()
+    {
+        try {
+            return readFileService.getLines("admin_log.log");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-        return logService.noticeLog(noticeDefine.WORK_START, "개발팀 김사원 출근", "2022-07-18");
-    }   // 전체 사용자 조회
 
 }

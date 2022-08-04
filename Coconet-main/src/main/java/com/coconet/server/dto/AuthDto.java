@@ -10,5 +10,6 @@ public class AuthDto {
 
     private String name;
     private String authResult;
+    private String status;
 
 }

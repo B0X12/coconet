@@ -16,14 +16,18 @@
 
     <!-- log file path -->
     <property name="LOG_PATH" value="./logs"/>
+
     <!-- log file name -->
     <property name="INFO_LOG_FILE_NAME" value="info_log"/>
-    <!-- custom log file name -->
-    <property name="NOTICE_LOG_FILE_NAME" value="notice_log"/>
     <!-- err log file name -->
     <property name="ERR_LOG_FILE_NAME" value="err_log"/>
+    <!-- custom log file name -->
+    <property name="USER_LOG_FILE_NAME" value="user_log"/>
+    <!-- custom log file name -->
+    <property name="ADMIN_LOG_FILE_NAME" value="admin_log"/>
+
     <!-- pattern -->
-    <property name="LOG_PATTERN" value="%d{HH:mm} %highlight(%-5level) %cyan(%logger{36}) - %msg%n"/> -->
+    <property name="LOG_PATTERN" value="%d{HH:mm} %highlight(%-5level) %cyan(%logger{36}) - %msg%n"/>
 
     <!-- Console Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -31,6 +35,7 @@
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
+
 
     <!-- INFO level의 log 파일 생성 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -55,27 +60,6 @@
         </rollingPolicy>
     </appender>
 
-    <!-- NOTICE 전용 log 파일 생성 -->
-    <appender name="NOTICE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- 파일경로 설정 -->
-        <file>${LOG_PATH}/${NOTICE_LOG_FILE_NAME}.log</file>
-        <!-- 출력패턴 설정-->
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%msg%n</pattern>
-
-        </encoder>
-        <!-- Rolling 정책 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 -->
-            <fileNamePattern>${LOG_PATH}/${NOTICE_LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <!-- 파일당 최고 용량 kb, mb, gb -->
-                <maxFileSize>10MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-            <!-- 일자별 로그파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거-->
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
 
     <!-- ERROR level의 log 파일 생성 -->
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -101,6 +85,53 @@
         </rollingPolicy>
     </appender>
 
+
+    <!-- USER log 파일 생성 -->
+    <appender name="USER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 파일경로 설정 -->
+        <file>${LOG_PATH}/${USER_LOG_FILE_NAME}.log</file>
+        <!-- 출력패턴 설정-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%msg%n</pattern>
+
+        </encoder>
+        <!-- Rolling 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 -->
+            <fileNamePattern>${LOG_PATH}/${USER_LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 파일당 최고 용량 kb, mb, gb -->
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 일자별 로그파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+
+    <!-- ADMIN log 파일 생성 -->
+    <appender name="ADMIN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 파일경로 설정 -->
+        <file>${LOG_PATH}/${ADMIN_LOG_FILE_NAME}.log</file>
+        <!-- 출력패턴 설정-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%msg%n</pattern>
+
+        </encoder>
+        <!-- Rolling 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 -->
+            <fileNamePattern>${LOG_PATH}/${ADMIN_LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 파일당 최고 용량 kb, mb, gb -->
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 일자별 로그파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+
     <!-- root레벨 설정 -->
     <root level="${LOG_LEVEL}">
         <appender-ref ref="CONSOLE"/>
@@ -114,9 +145,14 @@
         <appender-ref ref="ERROR"/>
     </logger>
 
-    <!-- NOTICE log 파일 생성 -->
-    <logger name="noticeLog" level="${LOG_LEVEL}">
-        <appender-ref ref="NOTICE"/>
+    <!-- USER log 파일 생성 -->
+    <logger name="userLog" level="${LOG_LEVEL}">
+        <appender-ref ref="USER"/>
+    </logger>
+
+    <!-- ADMIN log 파일 생성 -->
+    <logger name="adminLog" level="${LOG_LEVEL}">
+        <appender-ref ref="ADMIN"/>
     </logger>
 
     <!-- log4jdbc 옵션 설정 -->

@@ -41,7 +41,7 @@ public class JwtController {
         responseHeaders.add("Jwt_Access_Token", relssueTokenDto.getAccessToken());
         responseHeaders.add("Jwt_Refresh_Token", relssueTokenDto.getRefreshToken());
 
-        AuthDto authDto = new AuthDto(relssueTokenDto.getName(), relssueTokenDto.getAuthResult());
+        AuthDto authDto = new AuthDto(relssueTokenDto.getName(), relssueTokenDto.getAuthResult(), "출근전");
 
         return ResponseEntity.ok()
                 .headers(responseHeaders)
