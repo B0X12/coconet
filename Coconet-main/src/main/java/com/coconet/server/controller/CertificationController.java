@@ -28,6 +28,9 @@ public class CertificationController {
     private final CertificationService certificationService;
     private final LogTag logTag;
 
+    /**
+     * todolist 추가
+     */
     @GetMapping("/sendSMS")
     public ResponseEntity<CertificationDto> sendSMS(@RequestParam("name") String name, @RequestParam("phone") String phone) {
         // name으로 정보 찾아서 phone 정보 일치하는지 확인
@@ -40,10 +43,9 @@ public class CertificationController {
             logService.buildLog(
                     customUserDetailsService.loadAuthoritiesByUser(user)
                     , logTag.TAG_CERTIFICATION
-                    , false
                     , "휴대폰 인증 실패"
-                    , user.getEmail()
-                    , logTag.TYPE_WEB);
+                    , user.getName()
+                    , user.getEmail());
 
             throw new UserNotFoundException(String.format("사용자를 찾을 수 없습니다."));
         }
@@ -60,10 +62,9 @@ public class CertificationController {
             logService.buildLog(
                     customUserDetailsService.loadAuthoritiesByUser(user)
                     , logTag.TAG_CERTIFICATION
-                    , true
                     , "휴대폰 인증 성공"
-                    , user.getEmail()
-                    , logTag.TYPE_WEB);
+                    , user.getName()
+                    , user.getEmail());
 
             certificationService.certifiedPhoneNumber(phone, authCode);
 

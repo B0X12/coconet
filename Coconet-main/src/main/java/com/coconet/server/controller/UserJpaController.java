@@ -116,10 +116,9 @@ public class UserJpaController {
             logService.buildLog(
                     customUserDetailsService.loadAuthoritiesByUser(user)
                     , logTag.TAG_LOGIN
-                    , false
                     , "로그인 실패"
-                    , user.getEmail()
-                    , logTag.TYPE_WEB);
+                    , user.getName()
+                    , user.getEmail());
 
             throw new UserNotFoundException(String.format("사용자를 찾을 수 없습니다."));
         }
@@ -136,10 +135,9 @@ public class UserJpaController {
             logService.buildLog(
                     customUserDetailsService.loadAuthoritiesByUser(user)
                     , logTag.TAG_LOGIN
-                    , true
                     , "로그인 성공"
-                    , user.getEmail()
-                    , logTag.TYPE_WEB);
+                    , user.getName()
+                    , user.getEmail());
 
             return ResponseEntity.ok()
                     .headers(responseHeaders)
@@ -149,10 +147,9 @@ public class UserJpaController {
             logService.buildLog(
                     customUserDetailsService.loadAuthoritiesByUser(user)
                     , logTag.TAG_LOGIN
-                    , false
                     , "로그인 실패"
-                    , user.getEmail()
-                    , logTag.TYPE_WEB);
+                    , user.getName()
+                    , user.getEmail());
 
             throw new UserNotFoundException(String.format("입력된 정보가 틀렸습니다."));
         }

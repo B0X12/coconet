@@ -1,5 +1,7 @@
 package com.coconet.server.controller;
 
+
+import com.coconet.server.dto.NoticeDto;
 import com.coconet.server.dto.TodoResultDto;
 import com.coconet.server.entity.*;
 import com.coconet.server.exception.UserNotFoundException;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -18,18 +21,58 @@ import java.util.List;
 public class BoardJpaController {
 
     private final UserRepository userRepository;
-    private final BoardRepository boardRepository;
     private final ApprovalRepository approvalRepository;
     private final ChartRepository chartRepository;
     private final LogRepository logRepository;
     private final TodoRepository todoRepository;
+    private final BoardRepository boardRepository;
 
     /**
      * 공지사항 조회
      */
     @GetMapping("/board/notice")//공지사항 전체 조회
-    public List<Notice> noticeAll() {
-        return boardRepository.findAll();
+    public List<NoticeDto> noticeAll() {
+        List<NoticeDto> noticeDtoList = new ArrayList<>();
+
+        int size = boardRepository.findAllByTitle().size();
+        for (int i=0; i<size; i++) {
+            NoticeDto noticeDto = new NoticeDto();
+            noticeDto.setId(boardRepository.findAllById().get(i));
+            noticeDto.setTitle(boardRepository.findAllByTitle().get(i));
+            noticeDto.setDay(boardRepository.findAllByDay().get(i));
+            noticeDtoList.add(i, noticeDto);
+        }
+
+        return noticeDtoList;
+    }
+
+    /**
+     * 공지사항 년도별 조회
+     */
+    @GetMapping("/board/notice/year")
+    public List<NoticeDto> noticeYear(@RequestParam("day") String day) {
+        List<NoticeDto> noticeDtoList = new ArrayList<>();
+
+        int size = boardRepository.findAllByTitleStartingWith(day).size();
+        for (int i=0; i<size; i++) {
+            NoticeDto noticeDto = new NoticeDto();
+            noticeDto.setId(boardRepository.findAllByIdStartingWith(day).get(i));
+            noticeDto.setTitle(boardRepository.findAllByTitleStartingWith(day).get(i));
+            noticeDto.setDay(boardRepository.findAllByDayStartingWith(day).get(i));
+            noticeDtoList.add(i, noticeDto);
+        }
+
+        return noticeDtoList;
+    }
+
+    /**
+     * 공지사항 단건 조회
+     */
+    @GetMapping("/board/notice/one")
+    public Optional<Notice> noticeOne(@RequestParam("title") String title,
+                                      @RequestParam("id") int id,
+                                      @RequestParam("day") String day) {
+        return boardRepository.findById(id);
     }
 
     /**

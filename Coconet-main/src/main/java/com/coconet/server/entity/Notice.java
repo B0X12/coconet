@@ -18,4 +18,5 @@ public class Notice {
     private int id;
     private String title;
     private String day;
+    private String date;
 }

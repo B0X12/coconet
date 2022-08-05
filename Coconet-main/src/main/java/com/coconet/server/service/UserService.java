@@ -35,15 +35,15 @@ public class UserService {
                 .build();
 
         Users users = Users.builder()
-                .Num(userDto.getNum())
+                .num(userDto.getNum())
                 .name(userDto.getName())
-                .birthDate(userDto.getBirthDate())
+                .birthdate(userDto.getBirthDate())
                 .phone(userDto.getPhone())
                 .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
-                .team(userDto.getTeam())
-                .tier(userDto.getTier())
-                .andNum(userDto.getAndNum())
+                .department(userDto.getDepartment())
+                .position(userDto.getPosition())
+                .andnum(userDto.getAndNum())
                 .authorities(Collections.singleton(authority))
                 .build();
 

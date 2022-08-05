@@ -45,7 +45,7 @@ public class LogService {
 
 
     // Logger logger = LoggerFactory.getLogger("noticeLog");
-    public boolean buildLog(List<GrantedAuthority> authority, String tag, boolean status, String title, String email, String type)
+    public boolean buildLog(List<GrantedAuthority> authority, String tag, String title, String name, String email)
     {
         String ip = getIp();
         String date = getDate();
@@ -53,27 +53,24 @@ public class LogService {
         if (authority.get(0).getAuthority().equals("ROLE_USER")) // 일반 사용자일 경우
         {
             // IP:192.168.0.1 | TAG:HOME | TITLE:신규 회원 추가 | STATUS:SUCCESS | EMAIL:box0_@naver.com | DATE:2022.07.28 | TYPE:WEB
-            userLogger.info("{ip:{}, tag:{}, title:{}, status:{}, email:{}, date:{}, type:{}}"
-                , ip
+            // userLogger.info("{\"tag\":\"{}\", \"title\":\"{}\", \"name\":\"{}\", \"email\":\"{}\", \"date\":\"{}\"}"
+            userLogger.info("{tag:&{}&, title:&{}&, name:&{}&, email:&{}&, date:&{}&}"
                 , tag
                 , title
-                , status
+                , name
                 , email
-                , date
-                , type);
+                , date);
             return true;
         }
         else if (authority.get(0).getAuthority().equals("ROLE_ADMIN")) // 관리자일 경우
         {
             // IP:192.168.0.1 | TAG:HOME | TITLE:출근 | STATUS:SUCCESS | EMAIL:box0_@naver.com | DATE:2022.07.28 | TYPE:WEB
-            adminLogger.info("{ip:{}, tag:{}, title:{}, status:{}, email:{}, date:{}, type:{}}"
+            adminLogger.info("{ip:&{}&, tag:&{}&, title:&{}&, email:&{}&, date:&{}&}"
                     , ip
                     , tag
                     , title
-                    , status
                     , email
-                    , date
-                    , type);
+                    , date);
             return true;
         }
         else

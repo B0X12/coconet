@@ -26,4 +26,5 @@ public class LogData {
     private String position;
     private String time;
     private String img;
+
 }

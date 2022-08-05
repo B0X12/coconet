@@ -32,8 +32,8 @@ public class UserDto {
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
    private String password;
 
-   private String team;
-   private String tier;
+   private String department;
+   private String position;
    private String andNum;
 
    private Set<AuthorityDto> authorityDtoSet;
@@ -44,12 +44,12 @@ public class UserDto {
       return UserDto.builder()
               .Num(users.getNum())
               .name(users.getName())
-              .birthDate(users.getBirthDate())
+              .birthDate(users.getBirthdate())
               .phone(users.getPhone())
               .email(users.getEmail())
-              .team(users.getTeam())
-              .tier(users.getTier())
-              .andNum(users.getAndNum())
+              .department(users.getDepartment())
+              .position(users.getPosition())
+              .andNum(users.getAndnum())
               .authorityDtoSet(users.getAuthorities().stream()
                       .map(authority -> AuthorityDto.builder().authorityName(authority.getAuthorityName()).build())
                       .collect(Collectors.toSet()))
