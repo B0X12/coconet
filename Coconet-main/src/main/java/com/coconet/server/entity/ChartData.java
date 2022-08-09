@@ -22,6 +22,7 @@ public class ChartData {
     private int num;
 
     private String title;
-    private int value;
+    private double value;
     private String color;
+
 }

@@ -17,13 +17,15 @@ import java.util.stream.Collectors;
 public class UserDto {
 
    // 회원가입 dto
-
    private int Num;
 
    @NotNull
    private String name;
 
-   private String birthDate;
+   @NotNull
+   private String birthdate;
+
+   @NotNull
    private String phone;
 
    @NotNull
@@ -32,8 +34,12 @@ public class UserDto {
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
    private String password;
 
+   @NotNull
    private String department;
+
+   @NotNull
    private String position;
+
    private String andNum;
 
    private Set<AuthorityDto> authorityDtoSet;
@@ -44,7 +50,7 @@ public class UserDto {
       return UserDto.builder()
               .Num(users.getNum())
               .name(users.getName())
-              .birthDate(users.getBirthdate())
+              .birthdate(users.getBirthdate())
               .phone(users.getPhone())
               .email(users.getEmail())
               .department(users.getDepartment())

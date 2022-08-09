@@ -86,3 +86,8 @@ insert into position(position_id, department_id, position) values(222, 105, '부
 insert into position(position_id, department_id, position) values(223, 105, '대리');
 insert into position(position_id, department_id, position) values(224, 105, '사원');
 insert into position(position_id, department_id, position) values(225, 105, '인턴');
+
+insert into user_status(user_id, status) values(90000, 15);
+insert into user_status(user_id, status) values(90001, 15);
+insert into user_status(user_id, status) values(90002, 15);
+insert into user_status(user_id, status) values(90003, 15);

@@ -1,14 +1,6 @@
 package com.coconet.server.controller;
 
-import com.coconet.server.dto.AuthDto;
 import com.coconet.server.dto.RelssueTokenDto;
-import com.coconet.server.dto.TokenDto;
-import com.coconet.server.entity.Token;
-import com.coconet.server.entity.Users;
-import com.coconet.server.exception.CustomException;
-import com.coconet.server.jwt.JwtTokenProvider;
-import com.coconet.server.repository.RefreshTokenRepository;
-import com.coconet.server.repository.UserRepository;
 import com.coconet.server.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +22,7 @@ public class JwtController {
      refresh token으로 access token 새로 발급
      */
     @PostMapping("/reissue")
-    public ResponseEntity<AuthDto> reissueToken(@RequestBody Map<String, String> refreshTokenMap)
+    public ResponseEntity<String> reissueToken(@RequestBody Map<String, String> refreshTokenMap)
     {
         String refreshToken = refreshTokenMap.get("refreshToken");
 
@@ -41,10 +33,6 @@ public class JwtController {
         responseHeaders.add("Jwt_Access_Token", relssueTokenDto.getAccessToken());
         responseHeaders.add("Jwt_Refresh_Token", relssueTokenDto.getRefreshToken());
 
-        AuthDto authDto = new AuthDto(relssueTokenDto.getName(), relssueTokenDto.getAuthResult(), "출근전");
-
-        return ResponseEntity.ok()
-                .headers(responseHeaders)
-                .body(authDto);
+        return ResponseEntity.ok().headers(responseHeaders).body("");
     }
 }

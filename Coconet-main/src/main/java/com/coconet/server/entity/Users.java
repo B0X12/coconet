@@ -1,5 +1,6 @@
 package com.coconet.server.entity;
 
+import com.sun.istack.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +33,8 @@ public class Users {
 
     private String birthdate;   //생년월일
     private String password;    //비밀번호
+
+    @Nullable
     private String andnum;      //안드로이드 번호
 
     @ManyToMany

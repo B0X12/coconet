@@ -133,7 +133,6 @@ public class JwtTokenProvider implements InitializingBean {
         return null;
     }
 
-
     // 문제 없으면 return true; (try에서 잡힘)
     // 문제 생기면 return false;
     public boolean validateToken(String token)

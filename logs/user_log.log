@@ -1,5 +1,34 @@
-{&tag&:&Login&, &title&:&로그인 성공&, &name&:&정재훈&, &email&:&jjh@naver.com&, &date&:&2022. 08. 05. 18:41:38&}
-{&tag&:&Login&, &title&:&로그인 성공&, &name&:&정재훈&, &email&:&jjh@naver.com&, &date&:&2022. 08. 05. 18:41:39&}
-{&tag&:&Login&, &title&:&로그인 성공&, &name&:&김은비&, &email&:&keb@naver.com&, &date&:&2022. 08. 05. 18:41:40&}
-{&tag&:&Login&, &title&:&로그인 성공&, &name&:&김은비&, &email&:&keb@naver.com&, &date&:&2022. 08. 05. 18:41:41&}
-{&tag&:&Login&, &title&:&로그인 성공&, &name&:&김은비&, &email&:&keb@naver.com&, &date&:&2022. 08. 05. 18:41:41&}
+{tag:@@Status, title:외근, name:김현빈, email:khb@naver.com, department:디자인팀, date:2022. 08. 09. 17:28:32}
+{tag:Status, title:출근, name:김현빈, email:khb@naver.com, department:디자인팀, date:2022. 08. 09. 17:28:33}
+{tag:Status, title:휴식, name:김현빈, email:khb@naver.com, department:디자인팀, date:2022. 08. 09. 17:28:34}
+{tag:@@Status, title:출장, name:김현빈, email:khb@naver.com, department:디자인팀, date:2022. 08. 09. 17:28:37}
+{tag:@@Status, title:휴가, name:김현빈, email:khb@naver.com, department:디자인팀, date:2022. 08. 09. 17:28:39}
+{tag:Status, title:퇴근, name:김현빈, email:khb@naver.com, department:디자인팀, date:2022. 08. 09. 17:28:40}
+{tag:Status, title:출근, name:정재훈, email:jjh@naver.com, department:개발팀, date:2022. 08. 09. 17:28:49}
+{tag:Status, title:직원 50% 출근 완료, date:2022. 08. 09. 17:28:55}
+{tag:Status, title:직원 50% 출근 완료, date:2022. 08. 09. 17:30:19}
+{tag:Status, title:직원 0% 출근 완료, date:2022. 08. 09. 17:33:16}
+{tag:Status, title:직원 0% 출근 완료, date:2022. 08. 09. 17:37:40}
+{tag:Login, title:로그인 성공, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:20:23}
+{tag:Status, title:출근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:20:23}
+{tag:Login, title:로그인 성공, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:39:58}
+{tag:Status, title:출근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:39:58}
+{tag:Login, title:로그인 성공, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:40:43}
+{tag:Status, title:출근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:40:43}
+{tag:Status, title:퇴근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:40:46}
+{tag:Login, title:로그인 성공, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:41:10}
+{tag:Status, title:출근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:41:10}
+{tag:Status, title:퇴근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:41:27}
+{tag:Login, title:로그아웃, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:58:26}
+{tag:Status, title:퇴근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 18:58:26}
+{tag:Login, title:로그인 성공, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 19:06:25}
+{tag:Status, title:출근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 19:06:25}
+{tag:Login, title:로그아웃, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 19:06:30}
+{tag:Status, title:퇴근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 19:06:30}
+{tag:Login, title:로그아웃, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 19:09:12}
+{tag:Status, title:퇴근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 19:09:12}
+{tag:Login, title:로그아웃, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 19:09:18}
+{tag:Status, title:퇴근, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 19:09:18}
+{tag:Certification, title:휴대폰 인증 성공, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 21:01:28}
+{tag:Certification, title:휴대폰 인증 성공, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 21:01:45}
+{tag:Certification, title:휴대폰 인증 성공, name:김은비, email:keb@naver.com, department:인사팀, date:2022. 08. 09. 21:01:56}

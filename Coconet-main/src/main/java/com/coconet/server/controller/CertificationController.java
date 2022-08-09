@@ -45,7 +45,8 @@ public class CertificationController {
                     , logTag.TAG_CERTIFICATION
                     , "휴대폰 인증 실패"
                     , user.getName()
-                    , user.getEmail());
+                    , user.getEmail()
+                    , user.getDepartment());
 
             throw new UserNotFoundException(String.format("사용자를 찾을 수 없습니다."));
         }
@@ -64,7 +65,8 @@ public class CertificationController {
                     , logTag.TAG_CERTIFICATION
                     , "휴대폰 인증 성공"
                     , user.getName()
-                    , user.getEmail());
+                    , user.getEmail()
+                    , user.getDepartment());
 
             certificationService.certifiedPhoneNumber(phone, authCode);
 

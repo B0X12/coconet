@@ -43,29 +43,28 @@ public class LogService {
         return formatedNow;
     }
 
-
     // Logger logger = LoggerFactory.getLogger("noticeLog");
-    public boolean buildLog(List<GrantedAuthority> authority, String tag, String title, String name, String email)
+    public boolean buildLog(List<GrantedAuthority> authority, String tag, String title, String name, String email, String department)
     {
         String ip = getIp();
         String date = getDate();
 
         if (authority.get(0).getAuthority().equals("ROLE_USER")) // 일반 사용자일 경우
         {
-            // IP:192.168.0.1 | TAG:HOME | TITLE:신규 회원 추가 | STATUS:SUCCESS | EMAIL:box0_@naver.com | DATE:2022.07.28 | TYPE:WEB
-            // userLogger.info("{\"tag\":\"{}\", \"title\":\"{}\", \"name\":\"{}\", \"email\":\"{}\", \"date\":\"{}\"}"
-            userLogger.info("{tag:&{}&, title:&{}&, name:&{}&, email:&{}&, date:&{}&}"
+            // {tag:Login, title:로그인 성공, name:정재훈, email:jjh@naver.com, date:2022. 08. 05. 21:02:09}
+            userLogger.info("{tag:{}, title:{}, name:{}, email:{}, department:{}, date:{}}"
                 , tag
                 , title
                 , name
                 , email
+                , department
                 , date);
             return true;
         }
         else if (authority.get(0).getAuthority().equals("ROLE_ADMIN")) // 관리자일 경우
         {
-            // IP:192.168.0.1 | TAG:HOME | TITLE:출근 | STATUS:SUCCESS | EMAIL:box0_@naver.com | DATE:2022.07.28 | TYPE:WEB
-            adminLogger.info("{ip:&{}&, tag:&{}&, title:&{}&, email:&{}&, date:&{}&}"
+            // {ip:192.168.57.1, tag:Login, title:로그인 성공, email:admin, date:2022. 08. 05. 21:08:29}
+            adminLogger.info("{ip:{}, tag:{}, title:{}, email:{}, date:{}}"
                     , ip
                     , tag
                     , title
@@ -77,5 +76,20 @@ public class LogService {
         {
             return false;
         }
+    }
+
+    /**
+     * 출근 시간, 출근 사용자 퍼센트 기록용 메소드
+     */
+    public boolean buildLog(String tag, String title)
+    {
+        String date = getDate();
+
+        userLogger.info("{tag:{}, title:{}, date:{}}"
+                , tag
+                , title
+                , date);
+        return true;
+
     }
 }

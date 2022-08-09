@@ -1,5 +1,6 @@
 package com.coconet.server.controller;
 
+import com.coconet.server.dto.AuthDto;
 import com.coconet.server.entity.Users;
 import com.coconet.server.repository.DepartmentRepository;
 import com.coconet.server.repository.PositionRepository;
@@ -60,16 +61,17 @@ public class AdminController {
      */
     @GetMapping("/user/username")
     @PreAuthorize("hasAnyRole('ADMIN')") // ADMIN 권한만 조회 가능
-    public List<String> retrieveUsername(@RequestParam("department") String department
-                    ,@RequestParam("position") String position)
+    public List<AuthDto> retrieveUsername(@RequestParam("department") String department
+                    , @RequestParam("position") String position)
     {
         // 부서&직급 정보가 일치하는 유저를 반환
         List<Users> findUser = userRepository.findByDepartmentAndPosition(department, position);
 
-        List<String> usernameList = new ArrayList<>();
+        List<AuthDto> usernameList = new ArrayList<>();
         for (int i = 0; i < findUser.size(); i++)
         {
-            usernameList.add(findUser.get(i).getName());
+            AuthDto authDto = new AuthDto(findUser.get(i).getName(), findUser.get(i).getNum());
+            usernameList.add(i, authDto);
         }
 
         return usernameList;
