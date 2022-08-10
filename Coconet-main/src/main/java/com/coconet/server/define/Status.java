@@ -12,12 +12,20 @@ public class Status {
     public final int WORK_DAYOFF = 14; // 휴가
     public final int WORK_NOTHING = 15; // (로그아웃시)출근전 상태로 Setting
 
+    public final int WORK_OUTWORK_START = 111; // 외근 신청 상태 - (로그인시)근무중
+    public final int WORK_OUTWORK_NOTHING = 112; // 외근 신청 상태 - (로그아웃시)출근전 상태로 Setting
+    public final int WORK_SITETRIP_START = 131; // 출장 신청 상태 - (로그인시)근무중
+    public final int WORK_SITETRIP_NOTHING = 132; // 출장 신청 상태 - (로그아웃시)출근전 상태로 Setting
+
+
     // 타이틀 얻어오기
     public String getStatus(int id)
     {
         switch (id)
         {
             case WORK_START:
+            case WORK_OUTWORK_START:
+            case WORK_SITETRIP_START:
                 return "[WORK_START]";
 
             case WORK_OUTWORK:
@@ -33,6 +41,8 @@ public class Status {
                 return "[WORK_DAYOFF]";
 
             case WORK_NOTHING:
+            case WORK_OUTWORK_NOTHING:
+            case WORK_SITETRIP_NOTHING:
                 return "[WORK_FINISH]";
 
             default:

@@ -29,7 +29,6 @@ public class BoardService {
     private final Status status;
 
     // 로그 관련
-    private final CustomUserDetailsService customUserDetailsService;
     private final LogService logService;
     private final LogTag logTag;
 
@@ -41,14 +40,25 @@ public class BoardService {
     private double dayOffUserCount = 0; // 휴가
     private double nothingUserCount = 0; // 출근전
 
+
     public List<ChartData> findUserStatus()
     {
         allUserCount = userRepository.count(); // 전체 유저수 조회
+
         workUserCount = userStatusRepository.countByStatus(status.WORK_START); // 근무중인 사용자 수 조회
+
         outWorkUserCount = userStatusRepository.countByStatus(status.WORK_OUTWORK); // 외근나간 사용자 수 조회
+        outWorkUserCount += userStatusRepository.countByStatus(status.WORK_OUTWORK_START); // 외근나간 사용자 中 근무중인 사용자 수 조회
+        outWorkUserCount += userStatusRepository.countByStatus(status.WORK_OUTWORK_NOTHING); // 외근나간 사용자 中 미근무중인 사용자 수 조회
+
         siteTripUserCount = userStatusRepository.countByStatus(status.WORK_SITETRIP); // 출장간 사용자 수 조회
+        siteTripUserCount += userStatusRepository.countByStatus(status.WORK_SITETRIP_START); // 출장간 사용자 中 근무중인 사용자 수 조회
+        siteTripUserCount += userStatusRepository.countByStatus(status.WORK_SITETRIP_NOTHING); // 출장간 사용자 中 미근무중인 사용자 수 조회
+
         dayOffUserCount = userStatusRepository.countByStatus(status.WORK_DAYOFF); // 휴가중인 사용자 수 조회
+
         nothingUserCount = userStatusRepository.countByStatus(status.WORK_NOTHING); // 출근전인 사용자 수 조회
+
 
         List<ChartData> chartDataList = new ArrayList<>();
 

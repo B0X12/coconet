@@ -1,11 +1,14 @@
 package com.coconet.server.service;
 
+import com.coconet.server.define.Status;
 import com.coconet.server.dto.UserDto;
 import com.coconet.server.entity.Authority;
+import com.coconet.server.entity.UserStatus;
 import com.coconet.server.entity.Users;
 import com.coconet.server.exception.DuplicateMemberException;
 import com.coconet.server.repository.UserRepository;
 
+import com.coconet.server.repository.UserStatusRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +19,20 @@ import java.util.Collections;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserStatusRepository userStatusRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final Status status;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository
+            , UserStatusRepository userStatusRepository
+            , BCryptPasswordEncoder passwordEncoder
+            , Status status) {
         this.userRepository = userRepository;
+        this.userStatusRepository = userStatusRepository;
         this.passwordEncoder = passwordEncoder;
+        this.status = status;
     }
+
 
     @Transactional
     public UserDto signup(UserDto userDto) {
@@ -47,7 +58,17 @@ public class UserService {
                 .authorities(Collections.singleton(authority))
                 .build();
 
-        return UserDto.from(userRepository.save(users));
+        userRepository.save(users);
+
+        // UserStatus 테이블에 컬럼 추가
+        UserStatus userStatus = UserStatus.builder()
+                .num(users.getNum())
+                .status(status.WORK_NOTHING)
+                .build();
+
+        userStatusRepository.save(userStatus);
+
+        return UserDto.from(users);
     }
 
 }

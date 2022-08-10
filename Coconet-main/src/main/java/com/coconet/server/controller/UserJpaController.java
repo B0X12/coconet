@@ -169,7 +169,18 @@ public class UserJpaController {
                     , user.getDepartment());
 
             UserStatus findUserStatus = userStatusRepository.findByNum(user.getNum()); // Users 테이블의 num을 가져와 UserStatus 테이블에서 PK가 일치하는 컬럼을 찾음
-            findUserStatus.setStatus(status.WORK_START); // 현재 유저 상태를 '업무중'으로 변경
+            if (findUserStatus.getStatus() == status.WORK_OUTWORK) // 외근 중인 상태에서 로그인
+            {
+                findUserStatus.setStatus(status.WORK_OUTWORK_START);
+            }
+            else if (findUserStatus.getStatus() == status.WORK_SITETRIP) // 출장 중인 상태에서 로그인
+            {
+                findUserStatus.setStatus(status.WORK_SITETRIP_START);
+            }
+            else
+            {
+                findUserStatus.setStatus(status.WORK_START); // 현재 유저 상태를 '업무중'으로 변경
+            }
             userStatusRepository.save(findUserStatus); // db에 업데이트
 
             logService.buildLog(
@@ -205,13 +216,25 @@ public class UserJpaController {
      로그아웃
      */
     @PostMapping("/logout")
-    public void logout(@RequestHeader("Jwt_Access_Token") String accessToken, @RequestBody LogoutDto logoutDto) {
+    public void logout(@RequestHeader("Jwt_Access_Token") String accessToken, @RequestBody LogoutDto logoutDto)
+    {
         UserStatus findUserStatus = userStatusRepository.findByNum(logoutDto.getNum()); // Users 테이블의 num을 가져와 UserStatus 테이블에서 PK가 일치하는 컬럼을 찾음
-        findUserStatus.setStatus(status.WORK_NOTHING); // 현재 유저 상태를 '출근전'으로 변경
+
+        if (findUserStatus.getStatus() == status.WORK_OUTWORK) // 외근 중인 상태에서 로그인
+        {
+            findUserStatus.setStatus(status.WORK_OUTWORK_NOTHING);
+        }
+        else if (findUserStatus.getStatus() == status.WORK_SITETRIP) // 출장 중인 상태에서 로그인
+        {
+            findUserStatus.setStatus(status.WORK_SITETRIP_NOTHING);
+        }
+        else
+        {
+            findUserStatus.setStatus(status.WORK_NOTHING); // 현재 유저 상태를 '출근전'으로 변경
+        }
         userStatusRepository.save(findUserStatus); // db에 업데이트
 
         Users user = userRepository.findByEmail(jwtTokenProvider.getUserEmail(accessToken));
-
         logService.buildLog(
                 customUserDetailsService.loadAuthoritiesByUser(user)
                 , logTag.TAG_LOGOUT
@@ -219,7 +242,6 @@ public class UserJpaController {
                 , user.getName()
                 , user.getEmail()
                 , user.getDepartment());
-
         logService.buildLog(
                 customUserDetailsService.loadAuthoritiesByUser(user)
                 , logTag.TAG_USER_STATUS

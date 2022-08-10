@@ -1,0 +1,23 @@
+1. 파일명: COCONET.txt
+    
+2. 팀명: COCONET
+    
+3. 프로젝트 개요(가장 중요) : COCONET은 실제 기업에서 운영중인 인트라넷이라는 시나리오를 바탕으로 구현된 사내 보안 인트라넷입니다. 출퇴근 현황 관리, 근태 관련 문서 결재와 같은 기본적인 인사 서비스부터, 기업의 기밀 유출 방지를 위한 모바일 단말 관리(MDM) 서비스를 모두 하나의 인트라넷에서 관리할 수 있습니다.
+    
+4. 주요기능(6줄 이하) :
+- redux를 이용해 Restful한 서버와의 API 통신 및 유저 상태 관리 기능 구현
+- Spring Security를 적용하여 비인가 사용자와 URL에 대한 접근 제어 구현
+- JWT를 이용한 Token 기반의 Authentication 구현
+- 사용자, 관리자로 권한을 나눈 RBAC 기반의 Authorization 구현
+- 사용자 계정별 로그인 성공/실패 기록 및 상태변경 관련 로그 조회 가능
+- 관리자 로그인 성공/실패 기록 및 개인정보 접근/사용 내역 조회 가능
+
+5. 개발환경 (4줄 이하 (1줄당 28자로 가정 시)) : 
+OS: Window 10, Android 11
+IDE, DB: IntellJ(BackEnd), Visual Stuido Code(FrontEnd), Android Studio, H2 Database
+Language, Framework: Java, Spring Framework, JPA hibernate, html-css-js, React
+Library, API, SCM:  Bcrypt(패스워드 암호화), REST API, JJWT, Lombok, Logback, Coolsms, Redux, Axios, Vite, Git
+             
+6. 구성도 : COCONET_구성도.jpg
+
+7. 팀원사진 : 김은비.png, 김현빈.jpg, 정재훈.jpg
