@@ -5,6 +5,7 @@ import com.coconet.server.define.Status;
 import com.coconet.server.dto.NoticeDto;
 import com.coconet.server.dto.TodoResultDto;
 import com.coconet.server.dto.UserStatusLogdataDto;
+import com.coconet.server.dto.UserStatusNotificationDto;
 import com.coconet.server.entity.*;
 import com.coconet.server.exception.UserNotFoundException;
 import com.coconet.server.repository.*;
@@ -15,9 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.text.Collator;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -92,7 +92,7 @@ public class BoardJpaController {
      * 알림 목록 조회
      */
     @GetMapping("/board/notification")
-    public List<UserStatusLogdataDto> getNoticeList() {
+    public List<UserStatusNotificationDto> getNoticeList() {
         try {
             return readFileService.getStatusNotification("user_log.log");
         } catch (IOException e) {

@@ -46,6 +46,7 @@ public class BoardService {
         allUserCount = userRepository.count(); // 전체 유저수 조회
 
         workUserCount = userStatusRepository.countByStatus(status.WORK_START); // 근무중인 사용자 수 조회
+        workUserCount += userStatusRepository.countByStatus(status.WORK_BREAK); // 휴식중인 사용자 수
 
         outWorkUserCount = userStatusRepository.countByStatus(status.WORK_OUTWORK); // 외근나간 사용자 수 조회
         outWorkUserCount += userStatusRepository.countByStatus(status.WORK_OUTWORK_START); // 외근나간 사용자 中 근무중인 사용자 수 조회
@@ -80,10 +81,7 @@ public class BoardService {
         chartDataList.add(3, dayOffData);
         chartDataList.add(4, nothingData);
 
-        logService.buildLog(
-                logTag.TAG_STATUS
-                , "직원 " + (int)workUser + "% 출근 완료");
-
         return chartDataList;
     }
+
 }

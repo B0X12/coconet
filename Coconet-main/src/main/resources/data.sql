@@ -91,3 +91,9 @@ insert into user_status(user_id, status) values(90000, 15);
 insert into user_status(user_id, status) values(90001, 15);
 insert into user_status(user_id, status) values(90002, 15);
 insert into user_status(user_id, status) values(90003, 15);
+
+insert into Admin_Work_Time(id, title, value, state) values(1, '근무일', '월-금', 'false');
+insert into Admin_Work_Time(id, title, value, state) values(2, '출근시간', '09:00', 'false');
+insert into Admin_Work_Time(id, title, value, state) values(3, '점심시간', '12:00 - 13:00', 'false');
+insert into Admin_Work_Time(id, title, value, state) values(4, '퇴근시간', '05:00', 'false');
+insert into Admin_Work_Time(id, title, value, state) values(5, '심야 퇴근시간', '09:00', 'false');

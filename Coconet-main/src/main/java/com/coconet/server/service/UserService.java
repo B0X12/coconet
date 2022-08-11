@@ -9,6 +9,7 @@ import com.coconet.server.exception.DuplicateMemberException;
 import com.coconet.server.repository.UserRepository;
 
 import com.coconet.server.repository.UserStatusRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,22 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final UserStatusRepository userStatusRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final Status status;
-
-    public UserService(UserRepository userRepository
-            , UserStatusRepository userStatusRepository
-            , BCryptPasswordEncoder passwordEncoder
-            , Status status) {
-        this.userRepository = userRepository;
-        this.userStatusRepository = userStatusRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.status = status;
-    }
+    private final CertificationService certificationService;
 
 
     @Transactional
@@ -45,7 +38,7 @@ public class UserService {
                 .authorityName("ROLE_USER")
                 .build();
 
-        Users users = Users.builder()
+        Users user = Users.builder()
                 .num(userDto.getNum())
                 .name(userDto.getName())
                 .birthdate(userDto.getBirthdate())
@@ -57,18 +50,27 @@ public class UserService {
                 .andnum(userDto.getAndNum())
                 .authorities(Collections.singleton(authority))
                 .build();
-
-        userRepository.save(users);
+        userRepository.save(user);
 
         // UserStatus 테이블에 컬럼 추가
         UserStatus userStatus = UserStatus.builder()
-                .num(users.getNum())
+                .num(user.getNum())
                 .status(status.WORK_NOTHING)
                 .build();
-
         userStatusRepository.save(userStatus);
 
-        return UserDto.from(users);
+        certificationService.signupSuccessMessage(user.getPhone());
+        return UserDto.from(user);
     }
+
+    public Users passwordChange(Users user, String password)
+    {
+        user.setPassword(passwordEncoder.encode(password)); // 비밀번호 해싱
+        userRepository.save(user); // db 업데이트
+
+        certificationService.passwordChangeSuccessMessage(user.getPhone());
+        return user;
+    }
+
 
 }

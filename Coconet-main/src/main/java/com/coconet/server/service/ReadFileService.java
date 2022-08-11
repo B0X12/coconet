@@ -4,7 +4,9 @@ import com.coconet.server.define.LogTag;
 import com.coconet.server.define.Status;
 import com.coconet.server.dto.AdminLogdataDto;
 import com.coconet.server.dto.UserLogdataDto;
+import com.coconet.server.dto.UserStatusNotificationDto;
 import com.coconet.server.dto.UserStatusLogdataDto;
+import com.coconet.server.exception.CustomException;
 import com.google.gson.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,13 @@ public class ReadFileService
     public List<AdminLogdataDto> findAdminLog(JsonArray jsonArray)
     {
         String strArr = "";
+        String ip = "";
+        String tag = "";
+        String title = "";
+        String email = "";
+        String date = "";
+
+        int index = 0;
 
         List<AdminLogdataDto> logDataList = new ArrayList<>();
 
@@ -35,12 +44,11 @@ public class ReadFileService
             strArr += jsonArray.get(i).getAsString().replace("\"", ""); // 양옆 \" 제거
 
             // {ip:192.168.57.1, tag:Login, title:로그인 성공, email:admin, date:2022. 08. 05. 21:08:29}
-            String ip = strArr.substring(strArr.indexOf("ip:")+3, strArr.indexOf(", tag:"));
-            String tag = strArr.substring(strArr.indexOf("tag:")+4, strArr.indexOf(", title:"));
-            String title = strArr.substring(strArr.indexOf("title:")+6, strArr.indexOf(", email:"));
-            String email = strArr.substring(strArr.indexOf("email:")+6, strArr.indexOf(", date:"));
-            String date = strArr.substring(strArr.indexOf("date:")+5, strArr.length()-1);
-            // 나중에 Gson 라이브러리 써서 수정합시다...
+            index = strArr.indexOf("ip:") + 3;              ip = strArr.substring(index, strArr.indexOf(", tag:"));
+            index = strArr.indexOf("tag:") + 4;             tag = strArr.substring(index, strArr.indexOf(", title:"));
+            index = strArr.indexOf("title:") + 6;           title = strArr.substring(index, strArr.indexOf(", email:"));
+            index = strArr.indexOf("email:") + 6;           email = strArr.substring(index, strArr.indexOf(", date:"));
+            index = strArr.indexOf("date:") + 5;            date = strArr.substring(index, strArr.length()-1);
 
             AdminLogdataDto logData = new AdminLogdataDto(ip, tag, title, email, date);
             logDataList.add(i, logData);
@@ -52,6 +60,13 @@ public class ReadFileService
     public List<UserLogdataDto> findUserLog(JsonArray jsonArray, String findUserEmail)
     {
         String strArr = "";
+        String tag = "";
+        String title = "";
+        String name = "";
+        String email = "";
+        String date = "";
+
+        int index = 0;
 
         List<UserLogdataDto> logDataList = new ArrayList<>();
 
@@ -68,11 +83,11 @@ public class ReadFileService
                 strArr += jsonArray.get(i).getAsString().replace("\"", ""); // 양옆 \" 제거
 
                 // {tag:Login, title:로그인 성공, name:정재훈, email:jjh@naver.com, date:2022. 08. 05. 18:41:38}
-                String tag = strArr.substring(strArr.indexOf("tag:")+4, strArr.indexOf(", title:"));
-                String title = strArr.substring(strArr.indexOf("title:")+6, strArr.indexOf(", name:"));
-                String name = strArr.substring(strArr.indexOf("name:")+5, strArr.indexOf(", email:"));
-                String email = strArr.substring(strArr.indexOf("email:")+6, strArr.indexOf(", date:"));
-                String date = strArr.substring(strArr.indexOf("date:")+5, strArr.length()-1);
+                index = strArr.indexOf("tag:") + 4;             tag = strArr.substring(index, strArr.indexOf(", title:"));
+                index = strArr.indexOf("title:") + 6;           title = strArr.substring(index, strArr.indexOf(", name:"));
+                index = strArr.indexOf("name:") + 5;            name = strArr.substring(index, strArr.indexOf(", email:"));
+                index = strArr.indexOf("email:") + 6;           email = strArr.substring(index, strArr.indexOf(", department:"));
+                index = strArr.indexOf("date:") + 5;            date = strArr.substring(index, strArr.length() - 1);
                 // 나중에 Gson 라이브러리 써서 수정합시다...
 
                 UserLogdataDto logData = new UserLogdataDto(tag, title, name, email, date);
@@ -83,6 +98,7 @@ public class ReadFileService
         return logDataList;
     }
 
+    // 결재
     public List<UserStatusLogdataDto> findUserStatusWithAdminLog(JsonArray jsonArray)
     {
         String strArr = "";
@@ -91,21 +107,32 @@ public class ReadFileService
         String department = "";
         String date = "";
 
+        int cnt = 0;
+        int index = 0;
+
         List<UserStatusLogdataDto> logDataList = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.size(); i++) // jsonArray의 size는 {}단위로 구분
         {
-            // 루프를 돌면서 jsonArray 안의 object(중괄호)를 빼내어 값을 추출
-            if (jsonArray.get(i).getAsString().contains("tag:" + logTag.TAG_USER_STATUS_WITH_ADMIN)) // status 관련 로그면
+            if (cnt > 10) // 10개의 데이터만 반환
+            {
+                return logDataList;
+            }
+            else if (!(jsonArray.get(i).getAsString().contains("tag:" + logTag.TAG_USER_STATUS_WITH_ADMIN))) // status 관련 로그면
+            {
+                continue;
+            }
+            else
             {
                 strArr = "";
                 strArr += jsonArray.get(i).getAsString().replace("\"", ""); // 양옆 \" 제거
 
                 // {tag:Login, title:로그인 성공, name:정재훈, email:jjh@naver.com, department:개발팀 date:2022. 08. 05. 18:41:38}
-                userStatus = strArr.substring(strArr.indexOf("title:")+6, strArr.indexOf(", name:"));
-                name = strArr.substring(strArr.indexOf("name:")+5, strArr.indexOf(", email:"));
-                department = strArr.substring(strArr.indexOf("department:")+11, strArr.indexOf(", date:"));
-                date = strArr.substring(strArr.indexOf("date:")+5, strArr.length()-1);
+                index = strArr.indexOf("title:") + 6;           userStatus = strArr.substring(index, strArr.indexOf(", name:"));
+                index = strArr.indexOf("name:") + 5;            name = strArr.substring(index, strArr.indexOf(", email:"));
+                index = strArr.indexOf("department:") + 11;     department = strArr.substring(index, strArr.indexOf(", date:"));
+                index = strArr.indexOf("date:") + 5;            date = strArr.substring(index, strArr.length() - 1);
+                date = date.substring(0, date.length() - 10); // 날짜 정보만 반환되도록
 
                 UserStatusLogdataDto logData = new UserStatusLogdataDto(
                         userStatus
@@ -115,16 +142,15 @@ public class ReadFileService
                         , status.getColor(userStatus) // 상태에 따른 컬러값 반환
                 );
                 logDataList.add(logData);
-            }
-            else
-            {
-                continue;
+
+                cnt++;
             }
         }
 
         return logDataList;
     }
 
+    // 실시간 기록
     public List<UserStatusLogdataDto> findUserStatusLog(JsonArray jsonArray)
     {
         String strArr = "";
@@ -133,96 +159,105 @@ public class ReadFileService
         String department = "";
         String date = "";
 
+        int cnt = 0;
+        int index = 0;
+
         List<UserStatusLogdataDto> logDataList = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.size(); i++) // jsonArray의 size는 {}단위로 구분
         {
-            if (i > 10) // 10개의 데이터만 반환
+            if (cnt > 10) // 10개의 데이터만 반환
             {
                 return logDataList;
             }
-            else if (!(jsonArray.get(i).getAsString().contains("tag:" + logTag.TAG_USER_STATUS))) // status 관련 로그가 아니면
+            else if (!(jsonArray.get(i).getAsString().contains("tag:" + logTag.TAG_USER_STATUS))) // status 관련 로그면
             {
                 continue;
             }
             else
             {
-                strArr = "";
-                strArr += jsonArray.get(i).getAsString().replace("\"", ""); // 양옆 \" 제거
-
-                if (!(jsonArray.get(i).getAsString().contains("name"))) // name이 없는 경우 == 출근 퍼센트를 나타낸 로그일 경우
+                if (!(jsonArray.get(i).getAsString().contains("name"))) // name 항목이 없는 경우 == 출근 퍼센트를 나타낸 로그일 경우
                 {
-                    // {tag:Status, title:직원 25.0% 출근 완료, date:2022. 08. 09. 15:58:04}
-                    userStatus = strArr.substring(strArr.indexOf("title:")+6, strArr.indexOf(", date:"));
-                    date = strArr.substring(strArr.indexOf("date:")+5, strArr.length()-1);
-                    name = "System";
-                    department = "System";
+                    continue;
                 }
                 else
                 {
-                    // {tag:Login, title:로그인 성공, name:정재훈, email:jjh@naver.com, department:개발팀 date:2022. 08. 05. 18:41:38}
-                    userStatus = strArr.substring(strArr.indexOf("title:")+6, strArr.indexOf(", name:"));
-                    name = strArr.substring(strArr.indexOf("name:")+5, strArr.indexOf(", email:"));
-                    department = strArr.substring(strArr.indexOf("department:")+11, strArr.indexOf(", date:"));
-                    date = strArr.substring(strArr.indexOf("date:")+5, strArr.length()-1);
-                    date = date.substring(14, date.length() - 3); // 시간 정보만 반환되도록
-                }
+                    strArr = "";
+                    strArr += jsonArray.get(i).getAsString().replace("\"", ""); // 양옆 \" 제거
 
-                UserStatusLogdataDto logData = new UserStatusLogdataDto(
-                        userStatus
-                        , name
-                        , department
-                        , date
-                        , status.getColor(userStatus) // 상태에 따른 컬러값 반환
-                );
-                logDataList.add(logData);
+                    // {tag:Login, title:로그인 성공, name:정재훈, email:jjh@naver.com, department:개발팀 date:2022. 08. 05. 18:41:38}
+                    index = strArr.indexOf("title:") + 6;           userStatus = strArr.substring(index, strArr.indexOf(", name:"));
+                    index = strArr.indexOf("name:") + 5;            name = strArr.substring(index, strArr.indexOf(", email:"));
+                    index = strArr.indexOf("department:") + 11;     department = strArr.substring(index, strArr.indexOf(", date:"));
+                    index = strArr.indexOf("date:") + 5;            date = strArr.substring(index, strArr.length() - 1);
+                    date = date.substring(14, date.length() - 3); // 시간 정보만 반환되도록
+
+                    UserStatusLogdataDto logData = new UserStatusLogdataDto(
+                            userStatus
+                            , name
+                            , department
+                            , date
+                            , status.getColor(userStatus) // 상태에 따른 컬러값 반환
+                    );
+                    logDataList.add(logData);
+
+                    cnt++;
+                }
             }
         }
 
         return logDataList;
     }
 
-    public List<UserStatusLogdataDto> findStatusNotification(JsonArray jsonArray)
+    // 메인화면 알림
+    public List<UserStatusNotificationDto> findStatusNotification(JsonArray jsonArray)
     {
         String strArr = "";
-        String userStatus = "";
-        String name = "";
-        String department = "";
+        String title = "";
         String date = "";
 
-        List<UserStatusLogdataDto> logDataList = new ArrayList<>();
+        int cnt = 0;
+        int index = 0;
+
+        List<UserStatusNotificationDto> logDataList = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.size(); i++) // jsonArray의 size는 {}단위로 구분
         {
-            // 루프를 돌면서 jsonArray 안의 object(중괄호)를 빼내어 값을 추출
-            if (jsonArray.get(i).getAsString().contains("tag:"+ logTag.TAG_USER_STATUS)) // 출퇴근 관련 로그만 반환
+            if (cnt > 10) // 10개의 데이터만 반환
+            {
+                return logDataList;
+            }
+            else if (!(jsonArray.get(i).getAsString().contains("tag:"+ logTag.TAG_USER_STATUS))) // 출퇴근 관련 로그만 반환
+            {
+                continue;
+            }
+            else
             {
                 strArr = "";
                 strArr += jsonArray.get(i).getAsString().replace("\"", ""); // 양옆 \" 제거
 
-                if (!(jsonArray.get(i).getAsString().contains("name"))) // name이 없는 경우 == 출근 퍼센트를 나타낸 로그일 경우
+                if (!(jsonArray.get(i).getAsString().contains("name"))) // name 항목이 없는 경우 == 출근 퍼센트를 나타낸 로그일 경우
                 {
                     // {tag:Status, title:직원 25.0% 출근 완료, date:2022. 08. 09. 15:58:04}
-                    userStatus = strArr.substring(strArr.indexOf("title:")+6, strArr.indexOf(", date:"));
-                    date = strArr.substring(strArr.indexOf("date:")+5, strArr.length()-1);
-                    name = "System";
-                    department = "System";
+                    title = "";
+                    index = strArr.indexOf("title:") + 6;           title = strArr.substring(index, strArr.indexOf(", date:"));
+                    index = strArr.indexOf("date:") + 5;            date = strArr.substring(index, strArr.length() - 1);
                 }
                 else
                 {
                     // {tag:Login, title:로그인 성공, name:정재훈, email:jjh@naver.com, department:개발팀 date:2022. 08. 05. 18:41:38}
-                    userStatus = strArr.substring(strArr.indexOf("title:")+6, strArr.indexOf(", name:"));
-                    name = strArr.substring(strArr.indexOf("name:")+5, strArr.indexOf(", email:"));
-                    department = strArr.substring(strArr.indexOf("department:")+11, strArr.indexOf(", date:"));
-                    date = strArr.substring(strArr.indexOf("date:")+5, strArr.length()-1);
+                    title = "";
+                    index = strArr.indexOf("department:") + 11;     title += strArr.substring(index, strArr.indexOf(", date:")) + " ";
+                    index = strArr.indexOf("name:") + 5;            title += strArr.substring(index, strArr.indexOf(", email:")) + " ";
+                    index = strArr.indexOf("title:") + 6;           title += strArr.substring(index, strArr.indexOf(", name:"));
+                    index = strArr.indexOf("date:") + 5;            date = strArr.substring(index, strArr.length()-1);
+                    date = date.substring(14, date.length() - 3); // 시간 정보만 반환되도록
                 }
 
-                UserStatusLogdataDto logData = new UserStatusLogdataDto(userStatus, name, department, date);
+                UserStatusNotificationDto logData = new UserStatusNotificationDto(title, date);
                 logDataList.add(logData);
-            }
-            else
-            {
-                continue;
+
+                cnt++;
             }
         }
 
@@ -298,7 +333,7 @@ public class ReadFileService
      * @메인화면
      * 알림 조회 (tag가 Status, @Status인 것)
      */
-    public List<UserStatusLogdataDto> getStatusNotification(String fileName) throws IOException
+    public List<UserStatusNotificationDto> getStatusNotification(String fileName) throws IOException
     {
         List<String> readLines = Files.readAllLines(Paths.get(filePath + fileName));
 

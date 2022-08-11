@@ -1,21 +1,22 @@
 package com.coconet.server.controller;
 
 import com.coconet.server.dto.AuthDto;
+import com.coconet.server.entity.AdminWorkTime;
 import com.coconet.server.entity.Users;
+import com.coconet.server.repository.AdminWorkTimeRepository;
 import com.coconet.server.repository.DepartmentRepository;
 import com.coconet.server.repository.PositionRepository;
 import com.coconet.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 
 @Slf4j
 @RestController
@@ -26,6 +27,10 @@ public class AdminController {
     private final DepartmentRepository departmentRepository;
     private final PositionRepository positionRepository;
     private final UserRepository userRepository;
+    private final AdminWorkTimeRepository adminWorkTimeRepository;
+
+    @Value("${coconet.worktime.crontext}") // application.xml에 정의
+    private String cronTextSetting;
 
 
     /**
@@ -76,4 +81,86 @@ public class AdminController {
 
         return usernameList;
     }
+
+    /**
+     * 관리자페이지
+     * 출퇴근시간 조회
+     */
+    @GetMapping("/admin/worktime")
+    public List<AdminWorkTime> worktimeAll()
+    {
+        return adminWorkTimeRepository.findAll();
+    }
+
+    /**
+     * 관리자페이지
+     * 출퇴근시간 수정
+     */
+    @PostMapping("/admin/worktime/edit")
+    public String worktimeEdit(@Valid @RequestBody AdminWorkTime adminWorkTime)
+    {
+        adminWorkTimeRepository.updateValueTitle(adminWorkTime.getValue(), adminWorkTime.getTitle());
+        return spliceText();
+    }
+
+    public String spliceText()
+    {
+        String workDay = adminWorkTimeRepository.findValueByTitle("근무일");
+        String workTime = adminWorkTimeRepository.findValueByTitle("출근시간");
+
+        String[] workDaySplit = workDay.split("-");
+        String workDayCast = ""; // 월-금 -> MON-FRI
+        for (int i = 0; i < 2; i++)
+        {
+            if (i == 1)
+            {
+                workDayCast += "-"; // 월-()
+            }
+            switch (workDaySplit[i].toString())
+            {
+                case "일":
+                    workDayCast += "SUN";
+                    break;
+
+                case "월":
+                    workDayCast += "MON";
+                    break;
+
+                case "화":
+                    workDayCast += "TUE";
+                    break;
+
+                case "수":
+                    workDayCast += "WED";
+                    break;
+
+                case "목":
+                    workDayCast += "THU";
+                    break;
+
+                case "금":
+                    workDayCast += "FRI";
+                    break;
+
+                case "토":
+                    workDayCast += "SAT";
+                    break;
+            }
+        }
+
+        String[] workTimeSplit = workTime.split(":");
+
+        String cronText = "";
+        cronText += "00 "; // sec
+        cronText += workTimeSplit[1] + " "; // min
+        cronText += workTimeSplit[0] + " "; // hour
+        cronText += "* "; // day
+        cronText += "* "; // month
+        cronText += workDayCast; // day of week(요일, ex. MON-FRI)
+
+        cronTextSetting = cronText;
+
+        return cronTextSetting;
+    }
+
 }

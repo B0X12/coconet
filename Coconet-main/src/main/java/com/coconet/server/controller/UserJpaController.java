@@ -5,24 +5,20 @@ import com.coconet.server.define.Status;
 import com.coconet.server.dto.*;
 import com.coconet.server.entity.Token;
 import com.coconet.server.entity.UserStatus;
+import com.coconet.server.exception.CustomException;
 import com.coconet.server.exception.UserNotFoundException;
 import com.coconet.server.jwt.JwtTokenProvider;
 import com.coconet.server.repository.RefreshTokenRepository;
 import com.coconet.server.repository.UserRepository;
 import com.coconet.server.entity.Users;
 import com.coconet.server.repository.UserStatusRepository;
-import com.coconet.server.service.AuthService;
-import com.coconet.server.service.CustomUserDetailsService;
-import com.coconet.server.service.LogService;
-import com.coconet.server.service.UserService;
-import com.mysql.cj.log.Log;
+import com.coconet.server.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.validation.annotation.Validated;
@@ -46,6 +42,7 @@ public class UserJpaController {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserService userService;
     private final AuthService authService;
+    private final CertificationService certificationService;
     private final JwtTokenProvider jwtTokenProvider;
     private BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
@@ -251,6 +248,61 @@ public class UserJpaController {
                 , user.getDepartment());
     }
 
+    /**
+     현재 비밀번호 체크
+     */
+    @PostMapping("/password/check")
+    public boolean passwordCheck(@RequestBody PasswordCheckDto passwordCheckDto)
+    {
+        Users user = userRepository.findByNameAndPhone(passwordCheckDto.getName(), passwordCheckDto.getPhone());
+        Optional<Users> loginUser = Optional.ofNullable(user);
+
+        // db에 있는 비밀번호와 다르면
+        if (!(bcrypt.matches(passwordCheckDto.getPassword(), user.getPassword())))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    /**
+     @로그인 - 비밀번호 찾기
+     @유저정보수정 - 비밀번호 변경
+     */
+    @PostMapping("/password/change")
+    public ResponseEntity passwordChange(@RequestBody PasswordChangeDto passwordChangeDto)
+    {
+        Users user = userRepository.findByNameAndPhone(passwordChangeDto.getName(), passwordChangeDto.getPhone());
+        Optional<Users> loginUser = Optional.ofNullable(user);
+
+        if (passwordChangeDto.getNewPassword().length() < 8)
+        {
+            logService.buildLog(
+                    customUserDetailsService.loadAuthoritiesByUser(user)
+                    , logTag.TAG_PASSWORD_CHANGE
+                    , "비밀번호 변경 실패"
+                    , user.getName()
+                    , user.getEmail()
+                    , user.getDepartment());
+            throw new CustomException(String.format("비밀번호는 8자 이상으로 설정해주세요."));
+        }
+        else
+        {
+            user = userService.passwordChange(user, passwordChangeDto.getNewPassword());
+            logService.buildLog(
+                    customUserDetailsService.loadAuthoritiesByUser(user)
+                    , logTag.TAG_PASSWORD_CHANGE
+                    , "비밀번호 변경 성공"
+                    , user.getName()
+                    , user.getEmail()
+                    , user.getDepartment());
+        }
+        return ResponseEntity.ok(logTag.TAG_PASSWORD_CHANGE);
+    }
+
     @DeleteMapping("/users/{num}")
     public void deleteUser(@PathVariable int num) {
         userRepository.deleteById(num);
@@ -268,4 +320,5 @@ public class UserJpaController {
 
         return ResponseEntity.created(location).build();
     }
+
 }

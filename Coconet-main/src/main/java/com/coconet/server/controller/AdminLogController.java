@@ -36,7 +36,7 @@ public class AdminLogController {
         return null;
     }
 
-    @GetMapping("/logs/user") // ADMIN 페이지에서 관리자 로그 조회
+    @GetMapping("/logs/user") // ADMIN 페이지에서 사용자 로그 조회
     @PreAuthorize("hasAnyRole('ADMIN')") // ADMIN 권한만 조회 가능
     public List<UserLogdataDto> userLogInfo(@RequestParam("department") String department
             , @RequestParam("position") String position
