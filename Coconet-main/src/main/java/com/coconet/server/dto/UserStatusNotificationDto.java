@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserStatusNotificationDto {
 
+    private int userNum;
     private String title;
     private String date;
 

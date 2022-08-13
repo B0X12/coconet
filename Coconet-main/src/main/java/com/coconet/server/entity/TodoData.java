@@ -24,4 +24,6 @@ public class TodoData {
     @Column(name = "user_name")
     private String userName;
     private String todo;
+    private String todoCheck;
+
 }

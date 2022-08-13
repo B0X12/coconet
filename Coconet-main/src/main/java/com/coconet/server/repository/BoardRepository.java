@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Notice, Integer> {
+
     @Query("select n.title from Notice n")
     List<String> findAllByTitle();
 
@@ -29,4 +30,5 @@ public interface BoardRepository extends JpaRepository<Notice, Integer> {
 
     @Query("select n.id from Notice n where n.day LIKE %:day%")
     List<Integer> findAllByIdStartingWith(@Param("day") String day);
+
 }

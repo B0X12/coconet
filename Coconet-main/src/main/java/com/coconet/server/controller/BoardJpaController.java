@@ -28,9 +28,6 @@ public class BoardJpaController {
     private final BoardService boardService;
 
     private final UserRepository userRepository;
-    private final ApprovalRepository approvalRepository;
-    private final ChartRepository chartRepository;
-    private final LogRepository logRepository;
     private final TodoRepository todoRepository;
     private final BoardRepository boardRepository;
 
@@ -56,11 +53,20 @@ public class BoardJpaController {
             noticeDtoList.add(i, noticeDto);
         }
 
-        return noticeDtoList;
+        List<NoticeDto> noticeDtoListResult = new ArrayList<>();
+        for (int i=0; i<16; i++) {
+            NoticeDto noticeDto = new NoticeDto();
+            noticeDto.setId(boardRepository.findAllById().get(i));
+            noticeDto.setTitle(boardRepository.findAllByTitle().get(i));
+            noticeDto.setDay(boardRepository.findAllByDay().get(i));
+            noticeDtoListResult.add(i, noticeDto);
+        }
+
+        return noticeDtoListResult;
     }
 
     /**
-     * 공지사항 년도별 조회
+     * 공지사항 연도별 조회
      */
     @GetMapping("/board/notice/year")
     public List<NoticeDto> noticeYear(@RequestParam("day") String day) {
@@ -139,15 +145,14 @@ public class BoardJpaController {
      * todolist 조회
      */
     @GetMapping("/board/todo")//todoData
-    public List<TodoResultDto> todoAll(@RequestParam("username") String name) {
+    public List<TodoResultDto> todoAll(@RequestParam("userNum") int userNum) {
 
-        int size = todoRepository.findByuserName(name).size();
-        List<TodoData> listTodo = todoRepository.findByuserName(name);
+        int size = todoRepository.findByUserNum(userNum).size();
+        List<TodoData> listTodo = todoRepository.findByUserNum(userNum);
         List<TodoResultDto> todoResultDto = new ArrayList<>(size);
-
         if (!listTodo.isEmpty()) {
             for (int i=0; i<size; i++) {
-                TodoResultDto resultDto = new TodoResultDto(listTodo.get(i).getTodo());
+                TodoResultDto resultDto = new TodoResultDto(listTodo.get(i).getTodo(), listTodo.get(i).getTodoCheck());
                 todoResultDto.add(i, resultDto);
             }
             return todoResultDto;
@@ -162,15 +167,21 @@ public class BoardJpaController {
      */
     @PostMapping("/board/todo/add")
     public void todoAdd(@RequestBody TodoData todoData) {
+        if(todoData.getTodo() != null) {
 
-        Users findUser = userRepository.findByName(todoData.getUserName());
+            Users findUser = userRepository.findByNum(todoData.getUserNum());
 
-        TodoData todoAddData = new TodoData();
-        todoAddData.setUserNum(findUser.getNum());
-        todoAddData.setUserName(todoData.getUserName());
-        todoAddData.setTodo(todoData.getTodo());
+            TodoData todoAddData = new TodoData();
+            todoAddData.setUserNum(findUser.getNum());
+            todoAddData.setUserName(todoData.getUserName());
+            todoAddData.setTodo(todoData.getTodo());
+            todoAddData.setTodoCheck("false");
 
-        TodoData todoResultData = todoRepository.save(todoAddData);
+            TodoData todoResultData = todoRepository.save(todoAddData);
+        }
+        else{
+            throw new UserNotFoundException(String.format("내용을 입력하세요"));
+        }
     }
 
     /**
@@ -178,7 +189,22 @@ public class BoardJpaController {
      */
     @DeleteMapping("/board/todo/delete")
     public void todoDelete(@RequestBody TodoData todoData) {
-        todoRepository.delete(todoRepository.findByTodo(todoData.getTodo()));
+        todoRepository.deleteTodoNum(todoData.getUserNum(), todoData.getTodo());
+    }
+
+    /**
+     * todolist 선택
+     */
+    @PostMapping("/board/todo/check")
+    public void todoCheck(@RequestBody TodoData todoData) {
+
+        TodoData setTodoData = todoRepository.findByUserNumTodo(todoData.getUserNum(), todoData.getTodo());
+
+        if (setTodoData.getTodoCheck().equals("false")) {
+            todoRepository.updateCheck("true", todoData.getUserNum(), todoData.getTodo());
+        } else if (setTodoData.getTodoCheck().equals("true")) {
+            todoRepository.updateCheck("false", todoData.getUserNum(), todoData.getTodo());
+        }
     }
 
 }

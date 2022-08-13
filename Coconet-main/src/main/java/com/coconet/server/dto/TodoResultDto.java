@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class TodoResultDto {
 
     String todo;
+    String todo_Check;
 
 }

@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserStatusLogdataDto {
 
+    private int userNum;
     private String title;
 
     @Nullable

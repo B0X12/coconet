@@ -1,0 +1,3 @@
+<!--  spring-upload -->
+<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
+<!--  spring-upload -->

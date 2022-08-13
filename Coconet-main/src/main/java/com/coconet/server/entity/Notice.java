@@ -19,4 +19,5 @@ public class Notice {
     private String title;
     private String day;
     private String date;
+
 }

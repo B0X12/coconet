@@ -7,6 +7,7 @@ import com.coconet.server.dto.UserLogdataDto;
 import com.coconet.server.dto.UserStatusNotificationDto;
 import com.coconet.server.dto.UserStatusLogdataDto;
 import com.coconet.server.exception.CustomException;
+import com.coconet.server.repository.UserRepository;
 import com.google.gson.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,14 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ReadFileService
 {
+    private final UserRepository userRepository;
     private final String filePath = "./logs/";
     private final LogTag logTag;
     private final Status status;
@@ -104,6 +107,7 @@ public class ReadFileService
         String strArr = "";
         String userStatus = "";
         String name = "";
+        String email = "";
         String department = "";
         String date = "";
 
@@ -130,12 +134,14 @@ public class ReadFileService
                 // {tag:Login, title:로그인 성공, name:정재훈, email:jjh@naver.com, department:개발팀 date:2022. 08. 05. 18:41:38}
                 index = strArr.indexOf("title:") + 6;           userStatus = strArr.substring(index, strArr.indexOf(", name:"));
                 index = strArr.indexOf("name:") + 5;            name = strArr.substring(index, strArr.indexOf(", email:"));
+                index = strArr.indexOf("email:") + 6;           email = strArr.substring(index, strArr.indexOf(", department:"));
                 index = strArr.indexOf("department:") + 11;     department = strArr.substring(index, strArr.indexOf(", date:"));
                 index = strArr.indexOf("date:") + 5;            date = strArr.substring(index, strArr.length() - 1);
                 date = date.substring(0, date.length() - 10); // 날짜 정보만 반환되도록
 
                 UserStatusLogdataDto logData = new UserStatusLogdataDto(
-                        userStatus
+                        userRepository.findNumByEmail(email)
+                        , userStatus
                         , name
                         , department
                         , date
@@ -156,6 +162,7 @@ public class ReadFileService
         String strArr = "";
         String userStatus = "";
         String name = "";
+        String email = "";
         String department = "";
         String date = "";
 
@@ -188,12 +195,14 @@ public class ReadFileService
                     // {tag:Login, title:로그인 성공, name:정재훈, email:jjh@naver.com, department:개발팀 date:2022. 08. 05. 18:41:38}
                     index = strArr.indexOf("title:") + 6;           userStatus = strArr.substring(index, strArr.indexOf(", name:"));
                     index = strArr.indexOf("name:") + 5;            name = strArr.substring(index, strArr.indexOf(", email:"));
+                    index = strArr.indexOf("email:") + 6;           email = strArr.substring(index, strArr.indexOf(", department:"));
                     index = strArr.indexOf("department:") + 11;     department = strArr.substring(index, strArr.indexOf(", date:"));
                     index = strArr.indexOf("date:") + 5;            date = strArr.substring(index, strArr.length() - 1);
                     date = date.substring(14, date.length() - 3); // 시간 정보만 반환되도록
 
                     UserStatusLogdataDto logData = new UserStatusLogdataDto(
-                            userStatus
+                            userRepository.findNumByEmail(email)
+                            , userStatus
                             , name
                             , department
                             , date
@@ -214,6 +223,7 @@ public class ReadFileService
     {
         String strArr = "";
         String title = "";
+        String email = "";
         String date = "";
 
         int cnt = 0;
@@ -252,9 +262,13 @@ public class ReadFileService
                     index = strArr.indexOf("title:") + 6;           title += strArr.substring(index, strArr.indexOf(", name:"));
                     index = strArr.indexOf("date:") + 5;            date = strArr.substring(index, strArr.length()-1);
                     date = date.substring(14, date.length() - 3); // 시간 정보만 반환되도록
+                    index = strArr.indexOf("email:") + 6;           email = strArr.substring(index, strArr.indexOf(", department:"));
                 }
 
-                UserStatusNotificationDto logData = new UserStatusNotificationDto(title, date);
+                UserStatusNotificationDto logData = new UserStatusNotificationDto(
+                        userRepository.findNumByEmail(email)
+                        , title
+                        , date);
                 logDataList.add(logData);
 
                 cnt++;
@@ -272,6 +286,7 @@ public class ReadFileService
     public List<AdminLogdataDto> getAdminLog(String fileName) throws IOException
     {
         List<String> readLines = Files.readAllLines(Paths.get(filePath + fileName));
+        Collections.reverse(readLines);
 
         // List<String> -> json으로 변환
         String json = new Gson().toJson(readLines);
@@ -288,6 +303,7 @@ public class ReadFileService
     public List<UserLogdataDto> getUserLog(String fileName, String findUserEmail) throws IOException
     {
         List<String> readLines = Files.readAllLines(Paths.get(filePath + fileName));
+        Collections.reverse(readLines);
 
         // List<String> -> json으로 변환
         String json = new Gson().toJson(readLines);
@@ -304,6 +320,7 @@ public class ReadFileService
     public List<UserStatusLogdataDto> getUserStatusWithAdminLog(String fileName) throws IOException
     {
         List<String> readLines = Files.readAllLines(Paths.get(filePath + fileName));
+        Collections.reverse(readLines);
 
         // List<String> -> json으로 변환
         String json = new Gson().toJson(readLines);
@@ -320,6 +337,7 @@ public class ReadFileService
     public List<UserStatusLogdataDto> getUserStatusLog(String fileName) throws IOException
     {
         List<String> readLines = Files.readAllLines(Paths.get(filePath + fileName));
+        Collections.reverse(readLines);
 
         // List<String> -> json으로 변환
         String json = new Gson().toJson(readLines);
@@ -336,6 +354,7 @@ public class ReadFileService
     public List<UserStatusNotificationDto> getStatusNotification(String fileName) throws IOException
     {
         List<String> readLines = Files.readAllLines(Paths.get(filePath + fileName));
+        Collections.reverse(readLines);
 
         // List<String> -> json으로 변환
         String json = new Gson().toJson(readLines);
