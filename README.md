@@ -9,10 +9,13 @@
 <p style="text-align:center;">
     <img src="https://github.com/B0X12/coconet/assets/86587863/292fc956-dbfd-4731-b07f-6f5c6433a44b" width=100% />
 </p>
-<p style="text-align:center;">
+<br/>
+<div align="center" style="margin-top: 1em; margin-bottom: 3em;">
     MDM 기술을 기반으로 하는 사내 보안 인트라넷,<br/>
     <i>Coconet.</i>
-</p>
+</div>
+<br/>
+<br/>
 
     [소개글]
 
@@ -49,6 +52,9 @@
 ---
 
 <img src="https://github.com/B0X12/coconet/assets/86587863/c351defd-5fde-4fd4-b882-699c70e7410f" width=10% />
+
+<br/>
+<br/>
 
 > 더 자세한 내용은 여기에 <br/> 
 [coconet notion ➔](https://box0.notion.site/45948e4e1bdd462885e3de6571d9593d?pvs=4)
