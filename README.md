@@ -57,4 +57,4 @@
 <br/>
 
 > 더 자세한 내용은 여기에 <br/> 
-[coconet notion ➔](https://box0.notion.site/589f7c94c50040d8ac5d370de4249a91?pvs=4)
+[coconet notion ➔](https://box0.notion.site/45948e4e1bdd462885e3de6571d9593d)
