@@ -140,6 +140,8 @@
 
 [![소개 영상](https://github.com/B0X12/coconet/assets/86587863/cae3d35e-933f-4875-bbbc-8090af420791)](https://youtu.be/RMLZz-xziFQ?si=FNNQ5Lx2xLA89ExJ)
 
+<br/>
+
 ---
 
 <br/>
