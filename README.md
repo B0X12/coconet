@@ -51,10 +51,10 @@
 - [🖼 실제 화면](#-실제-화면)
     - [👨‍💼 사용자](#-사용자)
     - [👨‍💻 관리자](#-관리자)
-- [💿 소개 영상](#-소개-영상)
 - [🛠 사용 기술](#-사용-기술)
 - [🏛 아키텍처](#-아키텍처)
 - [📑 발표 자료](#-발표-자료)
+- [💿 소개 영상](#-소개-영상)
 
 <br/>
 
@@ -62,48 +62,53 @@
 
 ### 👨‍💼 사용자
 
-| ![Image 1](https://github.com/B0X12/coconet/assets/86587863/fb46b4f3-2ebd-496f-aaee-4aeedf68cdb3) | ![Image 2](https://github.com/B0X12/coconet/assets/86587863/cbb4392a-0611-487c-89ce-422a03bfcf2e) |
+| ![login](https://github.com/B0X12/coconet/assets/86587863/c9219a88-6c91-455b-95a9-77a4920e0aee) | ![password-change](https://github.com/B0X12/coconet/assets/86587863/afff5c41-1403-4771-a662-e8adea2dadc6) |
 |:-------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------:|
-|                                                로그인                                                |                                           비밀번호 변경 (초기화)                                           |
+|                                                **⬜ 로그인**                                                |                                           **⬜ 비밀번호 변경**<br/> 휴대폰 인증, 비밀번호 변경 (초기화)                                           |
 
-| ![Image 3](https://github.com/B0X12/coconet/assets/86587863/20c998f5-cbdf-4aff-9d44-a09c3faeab05) |
+| ![main-1](https://github.com/B0X12/coconet/assets/86587863/ecf4350a-c7fc-4e31-b68e-6aff7eb5b585) |
 |:-------------------------------------------------------------------------------------------------:|
 |                      **⬜ 메인화면** <br/> 프로필 관리, 투두 리스트, 메시지(미구현), 공지사항, 최근 알림                       |
 
-| ![Image 4](https://github.com/B0X12/coconet/assets/86587863/c85d64fe-21d6-4a3e-8bd5-8d723d599821) |
+| ![main-2](https://github.com/B0X12/coconet/assets/86587863/7ccb83dc-7d1a-4af5-a1f6-db23ef09afc1) |
 |:-------------------------------------------------------------------------------------------------:|
 |                             **⬜ 근무 현황** <br/>근무 현황 차트, 결재 현황, 출퇴근 현황                              |
 
-|  ![Image 5](https://github.com/B0X12/coconet/assets/86587863/8eba3afd-5faf-4685-b7a9-d3634717209f)  |
+|  ![main-3](https://github.com/B0X12/coconet/assets/86587863/8eba3afd-5faf-4685-b7a9-d3634717209f)  |
 |:---------------------------------------------------------------------------------------------------:|
-| **⬜ 기기 관리** <br/> 현재 등록된 기기 제어 현황 관리, 기기 알림 [차후 cocomo 서비스와 연동 예정](https://github.com/B0X12/cocomo) |
+| **⬜ 기기 관리** <br/> 현재 등록된 기기 제어 현황 관리, 기기 알림 [(차후 cocomo 서비스와 연동 예정)](https://github.com/B0X12/cocomo) |
+
+| ![mypage-1](https://github.com/B0X12/coconet/assets/86587863/4c63f9e4-cb89-46f2-b8ee-a5bd798e4400) |
+|:-------------------------------------------------------------------------------------------------:|
+|                             **⬜ 마이페이지 - 기본 정보** <br/> 프로필 이미지 변경, 사용자 이름, 전화번호, 이메일, 생년월일 조회 및 변경                              |
+
+| ![mypage-2](https://github.com/B0X12/coconet/assets/86587863/58cb83d7-0f4d-4d97-8634-0980bba30e0b) | ![mypage-3](https://github.com/B0X12/coconet/assets/86587863/8b89f31b-7e2a-4320-bda4-6df26fc9b955) |
+|:-------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------:|
+|                                                 **⬜ 마이페이지 - 조직 정보** <br/> 소속 부서 및 직급 조회                                                |                                            **⬜ 마이페이지 - 비밀번호 변경**                                          |
 
 <br/>
 
 ### 👨‍💻 관리자
 
-| ![Image 1](https://github.com/B0X12/coconet/assets/86587863/ffed5230-f145-41db-bdde-a7ea35cefe19) | ![Image 2](https://github.com/B0X12/coconet/assets/86587863/c27d9a70-ca68-4ac2-a342-b901ef9b0e80) |
+| ![admin-1](https://github.com/B0X12/coconet/assets/86587863/92a63da7-456e-4742-8042-49fca2b940de) | ![admin-log](https://github.com/B0X12/coconet/assets/86587863/cdb66e47-fe42-4997-a97e-bd6ed69768f8) |
 |:-------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------:|
 |                     **⬜ 출퇴근 시간 관리** <br/> 근무일, 출퇴근시간, 점심시간, 심야 퇴근 시간 입력 및 수정                      |                                **⬜ 관리자 로그 조회** <br/> 관리자 레벨의 로그 조회                                |
 
-| ![Image 3](https://github.com/B0X12/coconet/assets/86587863/ba37432c-98d0-41c0-be06-10c81e3ecebd) | ![Image 4](https://github.com/B0X12/coconet/assets/86587863/8efeee72-ca66-412e-b1f1-7d83993f49d3) |
+| ![admin-user-log](https://github.com/B0X12/coconet/assets/86587863/d4d95249-ec1c-40cb-827b-b0c3b5760445) | ![admin-manage-device](https://github.com/B0X12/coconet/assets/86587863/e21b9e31-962f-4fba-9a26-7970965e849c) |
 |:-------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------:|
 |                          **⬜ 사용자 로그 조회** <br/> 사용자 레벨의 로그를 검색 필터 기반으로 조회                          |                                 **⬜ 기기 제어** <br/> 특정 사용자의 기기를 제어                                  |
 
-<br/>
-
-## 💿 소개 영상
-🔗 클릭하면 유튜브 링크로 연결됩니다.
-
-[![소개 영상](https://github.com/B0X12/coconet/assets/86587863/cae3d35e-933f-4875-bbbc-8090af420791)](https://youtu.be/RMLZz-xziFQ?si=FNNQ5Lx2xLA89ExJ)
+| ![admin-manage-notice](https://github.com/B0X12/coconet/assets/86587863/d2cd4ddb-d149-4ea7-9853-57a7bad8a5c5) |
+|:-------------------------------------------------------------------------------------------------:|
+|                             **⬜ 공지사항 관리** <br/>공지사항 작성, 수정, 삭제, 연도별 조회                              |
 
 <br/>
 
 ## 🛠 사용 기술
 
-| **분류**               | **기술 스택**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **공통 개발환경**          | ![Windows 10](https://img.shields.io/badge/Windows%2010-0078D6?style=flat-square&logo=windows&logoColor=white) ![Android 11](https://img.shields.io/badge/Android%2011-3DDC84?style=flat-square&logo=android&logoColor=white)<br/> ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white) ![H2 Database](https://img.shields.io/badge/H2%20Database-4479A1?style=flat-square&logo=h2&logoColor=white)                                                                                                                                               |
+| **분류**               | **기술 스택** |
+|----------------------|-----------------|
+| **공통 개발환경**          | ![Windows 10](https://img.shields.io/badge/Windows%2010-0078D6?style=flat-square&logo=windows&logoColor=white) ![Android 11](https://img.shields.io/badge/Android%2011-3DDC84?style=flat-square&logo=android&logoColor=white)<br/> ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white) ![H2 Database](https://img.shields.io/badge/H2%20Database-4479A1?style=flat-square&logo=h2&logoColor=white)    |
 | **백엔드** | ![Java 11](https://img.shields.io/badge/Java%2011-007396?style=flat-square&logo=java&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat-square&logo=spring-boot&logoColor=white) ![Spring Security](https://img.shields.io/badge/Spring%20Security-5DB75F?style=flat-square&logo=spring-security&logoColor=white)<br/> ![jjwt](https://img.shields.io/badge/jjwt-000000?style=flat-square&logoColor=white) ![logback](https://img.shields.io/badge/logback-1A1A1A?style=flat-square&logo=logback&logoColor=white) |
 | **프론트엔드**      | ![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white) ![Redux](https://img.shields.io/badge/Redux-764ABC?style=flat-square&logo=redux&logoColor=white) ![Axios](https://img.shields.io/badge/Axios-0076C1?style=flat-square&logo=axios&logoColor=white) |
 
@@ -120,12 +125,20 @@
 
 🥉 교내 프로젝트 경진대회 장려상 수상 (26개 팀 중 3위)
 
-| ![Image 1](https://github.com/B0X12/coconet/assets/86587863/b8cba785-b8dc-4a7b-98ee-30b81d248760) | ![Image 2](https://github.com/B0X12/coconet/assets/86587863/14e99c59-4791-484b-b890-f10e80189929) |
+| ![표지](https://github.com/B0X12/coconet/assets/86587863/b8cba785-b8dc-4a7b-98ee-30b81d248760) | ![소개](https://github.com/B0X12/coconet/assets/86587863/14e99c59-4791-484b-b890-f10e80189929) |
 |:-------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------:|
-| ![Image 3](https://github.com/B0X12/coconet/assets/86587863/0824c6e0-2983-46d5-8182-84ed42d4e5a4) | ![Image 4](https://github.com/B0X12/coconet/assets/86587863/b2174aff-0e4a-443c-944e-a2c815042888) |
-
+| ![개요](https://github.com/B0X12/coconet/assets/86587863/0824c6e0-2983-46d5-8182-84ed42d4e5a4) | ![기술스택](https://github.com/B0X12/coconet/assets/86587863/b2174aff-0e4a-443c-944e-a2c815042888) |
+| ![ERD](https://github.com/B0X12/coconet/assets/86587863/8e9f28d5-a2e6-40fe-8bfa-f94526851cd1) | ![회원가입-소개](https://github.com/B0X12/coconet/assets/86587863/b3050262-ac1f-4ecf-a0ac-d6a741a2d401) |
+| ![로그인-소개](https://github.com/B0X12/coconet/assets/86587863/f08a17d0-cc17-4fb1-a0f9-dce1f4f90a03) | ![jwt-기술-구현](https://github.com/B0X12/coconet/assets/86587863/2eee9811-79a5-4bbe-a539-5d6a31c7bf76) |
+| ![비밀번호-초기화](https://github.com/B0X12/coconet/assets/86587863/77452d6f-c784-4190-bd72-4fab13faff5b) | ![메인화면](https://github.com/B0X12/coconet/assets/86587863/78b63164-379e-4c9b-8077-d4a263a76d93) |
+| ![출퇴근-시간-관리](https://github.com/B0X12/coconet/assets/86587863/4d134a52-156f-47c7-8a92-9e74b1184542) |
 
 <br/>
+
+## 💿 소개 영상
+🔗 클릭하면 유튜브 링크로 연결됩니다.
+
+[![소개 영상](https://github.com/B0X12/coconet/assets/86587863/cae3d35e-933f-4875-bbbc-8090af420791)](https://youtu.be/RMLZz-xziFQ?si=FNNQ5Lx2xLA89ExJ)
 
 ---
 
